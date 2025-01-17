@@ -9,8 +9,9 @@ class StandardMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
+        $user = $request->user();
         // Check if the authenticated user's subscription level is 'standard'
-        if (auth()->check() && auth()->user()->subscription->level === 'standard') {
+        if ($user && $user->subscription->level === 'standard' &&  \DB::getDefaultConnection() == 'standard') {
             return $next($request);
         }
 

@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use  Artisan;
 
 class CustomTokenGuard implements Guard
 {
@@ -45,7 +46,10 @@ class CustomTokenGuard implements Guard
     // This method validates the token by checking multiple databases
     protected function validateTokenAcrossDatabases($token)
     {
-        $databases = ['shared', 'standard']; // Add your database connections here
+        $this->clear();
+        
+        $databases = explode(',', env('DATABASE_CONNECTIONS')); // Get connections from .env
+
 
         foreach ($databases as $database) {
             $user = $this->findUserByToken($token, $database);
@@ -57,33 +61,45 @@ class CustomTokenGuard implements Guard
         return null;
     }
 
+
+
     // This method is used to find a user by token in a specific database
     protected function findUserByToken($token, $database)
-{
-    // Query the database connection directly without affecting global config
-    $connection = DB::connection($database);
+    {
+        // Query the database connection directly without affecting global config
+        $connection = DB::connection($database);
+        \Config::set('database.default', $database);
 
-    $tokenPart = explode('|', $token)[1];
+        $tokenPart = explode('|', $token)[1];
 
-    // Hash the token part to match the stored value
-    $hashedToken = hash('sha256', $tokenPart);
+        // Hash the token part to match the stored value
+        $hashedToken = hash('sha256', $tokenPart);
 
-    // Retrieve the full record from the personal_access_tokens table
-    $tokenRecord = $connection->table('personal_access_tokens')
-        ->where('token', $hashedToken) // Compare the hashed token
-        ->where('tokenable_type', 'App\Models\User') // Ensure it's a user token
-        ->first();
+        // Retrieve the full record from the personal_access_tokens table
+        $tokenRecord = $connection->table('personal_access_tokens')
+            ->where('token', $hashedToken) // Compare the hashed token
+            ->where('tokenable_type', 'App\Models\User') // Ensure it's a user token
+            ->first();            
+        // If token found, retrieve the corresponding user
+        if ($tokenRecord) {
+            $user = User::find($tokenRecord->tokenable_id); // Use the tokenable_id to get the user
+            return $user;
+        }
 
-   
-
-    // If token found, retrieve the corresponding user
-    if ($tokenRecord) {
-        $user = User::find($tokenRecord->tokenable_id); // Use the tokenable_id to get the user
-        return $user;
+        return null;
     }
 
-    return null;
-}
+    public function clear(){
+
+        Artisan::call('cache:clear');
+        Artisan::call('route:clear');
+        Artisan::call('config:clear');
+        Artisan::call('view:clear');
+        Artisan::call('optimize:clear');
+        Artisan::call('config:cache');
+       
+    }
+
 
 
     // This method checks if the user is authenticated

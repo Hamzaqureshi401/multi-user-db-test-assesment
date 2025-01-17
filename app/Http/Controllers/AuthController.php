@@ -46,7 +46,8 @@ class AuthController extends Controller
     ]);
 
     // Try to find the user in the 'standard' database
-    DB::setDefaultConnection('standard');
+    \Config::set('database.default', 'standard');
+
     $user = User::where('email', $validated['email'])->first();
 
     // If user exists in 'standard' database
