@@ -34,7 +34,7 @@ https://github.com/Hamzaqureshi401/multi-user-db-test-assesment
 5. **Start the Development Server**
    - Start the Laravel server on a custom port:
      ```bash
-     php artisan serve --port=80808
+     php artisan serve --port=8080
      ```
 
 6. **Import Postman Collection**
