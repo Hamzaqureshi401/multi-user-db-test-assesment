@@ -1,0 +1,56 @@
+{
+	"info": {
+		"_postman_id": "9a50363e-2a2a-4ac1-8160-58d4f0ef3828",
+		"name": "Test Assesment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25853237",
+		"_collection_link": "https://lunar-astronaut-mbz.postman.co/workspace/Team-Workspace~9bbcf9da-ac83-4ab6-8260-ba2f1c1e3998/collection/25853237-9a50363e-2a2a-4ac1-8160-58d4f0ef3828?action=share&source=collection_link&creator=25853237"
+	},
+	"item": [
+		{
+			"name": "Test Assesment Apis",
+			"item": [
+				{
+					"name": "Login test",
+					"request": {
+						"method": "POST",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "test register",
+					"request": {
+						"method": "POST",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "demo Api",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "shared test",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "standard test",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
